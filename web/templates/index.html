@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Package Manager</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .banner h1 {
+            font-size: 2.5em;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .section {
+            padding: 30px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: 500;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-box pre {
+            margin: 0;
+            color: #333;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+
+        .error {
+            background: #fee;
+            border-left-color: #f44;
+        }
+
+        .success {
+            background: #efe;
+            border-left-color: #4f4;
+        }
+
+        .flex-row {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .flex-row .input-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 600px) {
+            .flex-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .banner h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="banner">
+            <h1>Package Manager</h1>
+        </div>
+
+        <!-- Get Pack Configuration Section -->
+        <div class="section">
+            <h2>Get Pack Configuration</h2>
+            <button onclick="getPackConfiguration()">Get Pack Configuration</button>
+            <div id="packConfigResult"></div>
+        </div>
+
+        <!-- Calculate Packs Section -->
+        <div class="section">
+            <h2>Calculate Packs</h2>
+            <div class="flex-row">
+                <div class="input-group">
+                    <label for="quantity">Quantity</label>
+                    <input type="number" id="quantity" placeholder="Enter quantity" min="1">
+                </div>
+                <button onclick="calculatePacks()">Calculate</button>
+            </div>
+            <div id="calculateResult"></div>
+        </div>
+
+        <!-- Update Pack Configuration Section -->
+        <div class="section">
+            <h2>Update Pack Configuration</h2>
+            <div class="input-group">
+                <label for="packSizes">Pack Sizes (comma-separated numbers)</label>
+                <input type="text" id="packSizes" placeholder="e.g., 250, 500, 1000, 2000, 5000">
+            </div>
+            <div class="input-group">
+                <label for="updatedBy">Updated By</label>
+                <input type="text" id="updatedBy" placeholder="Your name">
+            </div>
+            <button onclick="updatePackConfiguration()">Update</button>
+            <div id="updateResult"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = '{{.ApiBaseURL}}';
+
+        // Get Pack Configuration
+        async function getPackConfiguration() {
+            const resultDiv = document.getElementById('packConfigResult');
+            try {
+                const response = await fetch(API_BASE_URL + '/api/pack-sizes');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = '<div class="result-box success"><pre>' + 
+                        'Pack Sizes: ' + data.pack_sizes.join(', ') + 
+                        '</pre></div>';
+                } else {
+                    throw new Error('Failed to fetch pack sizes');
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<div class="result-box error"><pre>Error: ' + 
+                    error.message + '</pre></div>';
+            }
+        }
+
+        // Calculate Packs
+        async function calculatePacks() {
+            const quantity = document.getElementById('quantity').value;
+            const resultDiv = document.getElementById('calculateResult');
+
+            if (!quantity || quantity <= 0) {
+                resultDiv.innerHTML = '<div class="result-box error"><pre>Please enter a valid quantity</pre></div>';
+                return;
+            }
+
+            try {
+                const response = await fetch(API_BASE_URL + '/api/calculate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ quantity: parseInt(quantity) })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    let resultText = 'Quantity: ' + data.quantity + '\n';
+                    resultText += 'Packs needed:\n';
+                    for (const [size, count] of Object.entries(data.packs)) {
+                        resultText += '  ' + size + ' x ' + count + '\n';
+                    }
+                    resultText += 'Total items: ' + data.total;
+
+                    resultDiv.innerHTML = '<div class="result-box success"><pre>' + 
+                        resultText + '</pre></div>';
+                } else {
+                    throw new Error(await response.text());
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<div class="result-box error"><pre>Error: ' + 
+                    error.message + '</pre></div>';
+            }
+        }
+
+        // Update Pack Configuration
+        async function updatePackConfiguration() {
+            const packSizes = document.getElementById('packSizes').value;
+            const updatedBy = document.getElementById('updatedBy').value;
+            const resultDiv = document.getElementById('updateResult');
+
+            if (!packSizes || !updatedBy) {
+                resultDiv.innerHTML = '<div class="result-box error"><pre>Please fill in all fields</pre></div>';
+                return;
+            }
+
+            try {
+                const response = await fetch(API_BASE_URL + '/api/update-pack-sizes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        pack_sizes: packSizes,
+                        updated_by: updatedBy
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultDiv.innerHTML = '<div class="result-box success"><pre>' + 
+                        'Pack sizes updated successfully!\nNew sizes: ' + 
+                        data.pack_sizes.join(', ') + '</pre></div>';
+                    
+                    // Clear inputs
+                    document.getElementById('packSizes').value = '';
+                    document.getElementById('updatedBy').value = '';
+                } else {
+                    throw new Error(await response.text());
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<div class="result-box error"><pre>Error: ' + 
+                    error.message + '</pre></div>';
+            }
+        }
+
+        // Load pack configuration on page load
+        window.addEventListener('DOMContentLoaded', getPackConfiguration);
+    </script>
+</body>
+</html>
