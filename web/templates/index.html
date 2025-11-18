@@ -194,13 +194,13 @@
     </div>
 
     <script>
-        const API_BASE_URL = '{{.ApiBaseURL}}';
+        const PACKMAN_API_BASE_URL = '{{.ApiBaseURL}}';
 
         // Get Pack Configuration
         async function getPackConfiguration() {
             const resultDiv = document.getElementById('packConfigResult');
             try {
-                const response = await fetch(API_BASE_URL + '/api/pack-sizes');
+                const response = await fetch(PACKMAN_API_BASE_URL + '/api/pack-sizes');
                 const data = await response.json();
                 
                 if (response.ok) {
@@ -227,7 +227,7 @@
             }
 
             try {
-                const response = await fetch(API_BASE_URL + '/api/calculate', {
+                const response = await fetch(PACKMAN_API_BASE_URL + '/api/calculate', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -268,7 +268,7 @@
             }
 
             try {
-                const response = await fetch(API_BASE_URL + '/api/update-pack-sizes', {
+                const response = await fetch(PACKMAN_API_BASE_URL + '/api/update-pack-sizes', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -19,7 +19,7 @@ type PageData struct {
 
 func main() {
 	// Load API URL from environment variable
-	apiBaseURL = os.Getenv("API_BASE_URL")
+	apiBaseURL = os.Getenv("PACKMAN_API_BASE_URL")
 	if apiBaseURL == "" {
 		apiBaseURL = "http://localhost:8081" // Default for local development
 	}

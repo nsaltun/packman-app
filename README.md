@@ -21,7 +21,7 @@ A web-based UI for the Packman package manager, built with Go and deployed on He
 2. **Set up environment variables**
    ```bash
    cp .env.example .env
-   # Edit .env and set API_BASE_URL to your API endpoint
+   # Edit .env and set PACKMAN_API_BASE_URL to your API endpoint
    ```
 
 3. **Run locally**
@@ -33,7 +33,7 @@ A web-based UI for the Packman package manager, built with Go and deployed on He
 4. **Test with Docker**
    ```bash
    docker build -t packman-app .
-   docker run -p 8080:8080 -e API_BASE_URL=https://your-api.herokuapp.com packman-app
+   docker run -p 8080:8080 -e PACKMAN_API_BASE_URL=https://your-api.herokuapp.com packman-app
    ```
 
 ## Deployment to Heroku
@@ -53,7 +53,7 @@ A web-based UI for the Packman package manager, built with Go and deployed on He
 3. **Configure environment variables**
    ```bash
    # Set your API URL (replace with your actual Heroku API URL)
-   heroku config:set API_BASE_URL=https://your-api-name.herokuapp.com -a your-app-name
+   heroku config:set PACKMAN_API_BASE_URL=https://your-api-name.herokuapp.com -a your-app-name
    ```
 
 ### Deploy via GitHub Integration
@@ -88,14 +88,14 @@ git push heroku main
 
 Configure these in Heroku (Dashboard → Settings → Config Vars):
 
-- `API_BASE_URL`: The URL of your deployed API (e.g., `https://your-api-name.herokuapp.com`)
+- `PACKMAN_API_BASE_URL`: The URL of your deployed API (e.g., `https://your-api-name.herokuapp.com`)
 - `PORT`: Automatically set by Heroku (default: 8080)
 
 
 **Environment-Based Configuration**
 The app automatically detects the environment:
 - Local development: Uses `http://localhost:8081` by default
-- Production: Uses the `API_BASE_URL` environment variable
+- Production: Uses the `PACKMAN_API_BASE_URL` environment variable
 
 ## Monitoring
 
@@ -107,7 +107,7 @@ heroku logs --tail -a your-app-name
 ## Troubleshooting
 
 - **Build fails**: Check `heroku logs` for build errors
-- **API calls fail**: Verify `API_BASE_URL` is set correctly with `heroku config -a your-app-name`
+- **API calls fail**: Verify `PACKMAN_API_BASE_URL` is set correctly with `heroku config -a your-app-name`
 - **App crashes**: Check logs with `heroku logs --tail -a your-app-name`
 
 ## Architecture
