@@ -237,10 +237,10 @@
 
                 const data = await response.json();
 
-                if (response.ok) {
-                    let resultText = 'Quantity: ' + data.quantity + '\n';
+                if (response.ok && data.data) {
+                    let resultText = 'Quantity: ' + data.data.quantity + '\n';
                     resultText += 'Packs needed:\n';
-                    for (const [size, count] of Object.entries(data.packs)) {
+                    for (const [size, count] of Object.entries(data.data.packs)) {
                         resultText += '  ' + size + ' x ' + count + '\n';
                     }
                     resultText += 'Total items: ' + data.total;
