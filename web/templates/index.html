@@ -289,13 +289,21 @@
                 const data = await response.json();
 
                 if (response.ok && data.data) {
+                    let resultText = 'Pack sizes updated successfully!\n\n';
+                    resultText += 'Pack Sizes: ' + data.data.pack_sizes.join(', ') + '\n';
+                    resultText += 'Version: ' + data.data.version + '\n';
+                    resultText += 'Updated At: ' + data.data.updated_at + '\n';
+                    resultText += 'Updated By: ' + (data.data.updated_by || 'N/A');
+                    
                     resultDiv.innerHTML = '<div class="result-box success"><pre>' + 
-                        'Pack sizes updated successfully!\nNew sizes: ' + 
-                        data.data.pack_sizes.join(', ') + '</pre></div>';
+                        resultText + '</pre></div>';
                     
                     // Clear inputs
                     document.getElementById('packSizes').value = '';
                     document.getElementById('updatedBy').value = '';
+                    
+                    // Refresh the pack configuration display
+                    getPackConfiguration();
                 } else {
                     throw new Error(await response.text());
                 }
