@@ -243,7 +243,6 @@
                     for (const [size, count] of Object.entries(data.data.packs)) {
                         resultText += '  ' + size + ' x ' + count + '\n';
                     }
-                    resultText += 'Total items: ' + data.total;
 
                     resultDiv.innerHTML = '<div class="result-box success"><pre>' + 
                         resultText + '</pre></div>';
@@ -267,6 +266,14 @@
                 return;
             }
 
+            // Convert comma-separated string to array of integers
+            const packSizesArray = packSizes.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+
+            if (packSizesArray.length === 0) {
+                resultDiv.innerHTML = '<div class="result-box error"><pre>Please enter valid numbers</pre></div>';
+                return;
+            }
+
             try {
                 const response = await fetch(PACKMAN_API_BASE_URL + '/api/v1/pack-sizes', {
                     method: 'PUT',
@@ -274,7 +281,7 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        pack_sizes: packSizes,
+                        pack_sizes: packSizesArray,
                         updated_by: updatedBy
                     })
                 });
