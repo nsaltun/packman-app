@@ -185,7 +185,7 @@
                 <input type="text" id="packSizes" placeholder="e.g., 250, 500, 1000, 2000, 5000">
             </div>
             <div class="input-group">
-                <label for="updatedBy">Updated By</label>
+                <label for="updatedBy">Updated By (optional)</label>
                 <input type="text" id="updatedBy" placeholder="Your name">
             </div>
             <button onclick="updatePackConfiguration()">Update</button>
@@ -262,8 +262,8 @@
             const updatedBy = document.getElementById('updatedBy').value;
             const resultDiv = document.getElementById('updateResult');
 
-            if (!packSizes || !updatedBy) {
-                resultDiv.innerHTML = '<div class="result-box error"><pre>Please fill in all fields</pre></div>';
+            if (!packSizes) {
+                resultDiv.innerHTML = '<div class="result-box error"><pre>Please fill in pack sizes</pre></div>';
                 return;
             }
 
