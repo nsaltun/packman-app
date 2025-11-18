@@ -203,9 +203,9 @@
                 const response = await fetch(PACKMAN_API_BASE_URL + '/api/v1/pack-sizes');
                 const data = await response.json();
                 
-                if (response.ok) {
+                if (response.ok && data.data) {
                     resultDiv.innerHTML = '<div class="result-box success"><pre>' + 
-                        'Pack Sizes: ' + data.pack_sizes.join(', ') + 
+                        'Pack Sizes: ' + data.data.pack_sizes.join(', ') + 
                         '</pre></div>';
                 } else {
                     throw new Error('Failed to fetch pack sizes');
@@ -281,10 +281,10 @@
 
                 const data = await response.json();
 
-                if (response.ok) {
+                if (response.ok && data.data) {
                     resultDiv.innerHTML = '<div class="result-box success"><pre>' + 
                         'Pack sizes updated successfully!\nNew sizes: ' + 
-                        data.pack_sizes.join(', ') + '</pre></div>';
+                        data.data.pack_sizes.join(', ') + '</pre></div>';
                     
                     // Clear inputs
                     document.getElementById('packSizes').value = '';
