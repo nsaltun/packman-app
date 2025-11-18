@@ -268,8 +268,8 @@
             }
 
             try {
-                const response = await fetch(PACKMAN_API_BASE_URL + '/api/v1/update-pack-sizes', {
-                    method: 'POST',
+                const response = await fetch(PACKMAN_API_BASE_URL + '/api/v1/pack-sizes', {
+                    method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                     },
