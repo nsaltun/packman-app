@@ -29,14 +29,16 @@ A web-based UI for the Packman package manager, built with Go and deployed on He
 
 3. **Run locally**
    ```bash
-   go run main.go
+   make run
    ```
    The app will be available at http://localhost:8080
 
 4. **Test with Docker**
    ```bash
-   docker build -t packman-app .
-   docker run -p 8080:8080 -e PACKMAN_API_BASE_URL=https://your-api.herokuapp.com packman-app
+   # run
+   make docker-up
+   # stop and remove container
+   make docker-stop
    ```
 
 ## Deployment to Heroku
