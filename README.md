@@ -4,6 +4,9 @@ Package Manager UI
 ## Overview
 A web-based UI for the Packman package manager, built with Go and deployed on Heroku.
 
+## Ready to Use Link (Heroku)
+- Heroku: https://packman-app-e1f16a2cdc2f.herokuapp.com/
+
 ## Prerequisites
 - Go 1.25
 - Docker (for local testing)
